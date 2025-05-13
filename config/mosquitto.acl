@@ -1,5 +1,0 @@
-user Nayan
-topic readwrite gimbal/Nayan/#
-
-user mqtt-client
-topic readwrite gimbal/mqtt-client/#
