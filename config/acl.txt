@@ -1,0 +1,40 @@
+# Allow read/write access to topics that start with the username
+pattern readwrite %u/#
+
+# Deny access to all other topics (optional but recommended for clarity/logging)
+topic deny #
+
+# Optional: You can add comments for clarity
+# %u = the current authenticated username
+# This setup ensures that user "alice" can only access topics like "alice/anything"
+# and is denied access to "bob/#", "public/#", or anything not starting with her username
+
+
+
+
+
+
+
+
+
+
+# Admin
+#user kanji
+#topic readwrite iks/#
+
+# MQTT Client (e.g., device)
+#user mqtt-client
+#topic readwrite iks/+/B0:B2:1C:60:78:78
+#topic readwrite iks/+/status
+
+
+# MQTT Client (e.g., device)
+user mqtt-client
+topic readwrite mqtt-client/#
+topic deny Nayan/#
+
+
+# MQTT Client (e.g., device)
+user Nayan
+topic readwrite Nayan/#
+topic deny mqtt-client/#
