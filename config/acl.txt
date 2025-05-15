@@ -1,7 +1,10 @@
-user mqtt-client
-topic readwrite mqtt-client/#
-topic deny Nayan/#
+# Allow read/write access to topics that start with the username
+pattern readwrite %u/#
 
-user Nayan
-topic readwrite Nayan/#
-topic deny mqtt-client/#
+# Deny access to all other topics (optional but recommended for clarity/logging)
+topic deny #
+
+# Optional: You can add comments for clarity
+# %u = the current authenticated username
+# This setup ensures that user "alice" can only access topics like "alice/anything"
+# and is denied access to "bob/#", "public/#", or anything not starting with her username
