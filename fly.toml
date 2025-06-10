@@ -1,0 +1,14 @@
+app = "mqtt-broker" # or whatever your app name is on Fly.io
+
+[[services]]
+  internal_port = 8883
+  protocol = "tcp"
+
+  [[services.ports]]
+    port = 8883
+    handlers = []
+
+  [[services.tcp_checks]]
+    interval = 10
+    timeout = 2
+    grace_period = "5s"
