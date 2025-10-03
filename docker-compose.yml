@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # 1. MOSQUITTO SERVICE (Messaging Core)
+  mosquitto:
+    # Use your custom built image (as it sets up Ubuntu/OpenSSL)
+    build: 
+      context: .
+      # Uses your existing Dockerfile to build the Mosquitto image
+      dockerfile: Dockerfile 
+    container_name: mosquitto
+    volumes:
+      # Mount the simplified config file
+      - ./config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      # Mount ACL file separately (good practice)
+      - ./config/acl.txt:/mosquitto/config/acl.txt
+    # Mosquitto exposes 1883 internally for Nginx only
+    networks:
+      - mqtt-net
+    restart: always
+
+  # 2. NGINX PROXY SERVICE (Public TLS Endpoint)
+  nginx:
+    # Use the required Nginx version on the Ubuntu 20.04 base
+    image: nginx:1.18-focal 
+    container_name: nginx-proxy
+    volumes:
+      # Mount the Nginx config
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # CRITICAL: Mount the certificates for Nginx to use for TLS termination
+      - ./config/broker.crt:/etc/nginx/certs/broker.crt:ro
+      - ./config/broker.key:/etc/nginx/certs/broker.key:ro
+      - ./config/ca.crt:/etc/nginx/certs/ca.crt:ro
+    ports:
+      # Publicly expose the secure port 8883
+      - "8883:8883"
+    depends_on:
+      - mosquitto
+    networks:
+      - mqtt-net
+    restart: always
+    
+networks:
+  mqtt-net:
+    driver: bridge
