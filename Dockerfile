@@ -1,4 +1,4 @@
-FROM eclipse-mosquitto:2.0
+FROM eclipse-mosquitto:2.0.21
 COPY ./config /mosquitto/config
 RUN chmod 600 /mosquitto/config/acl.txt
 EXPOSE 1883
